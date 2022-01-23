@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyClockView">
+        <attr name="mcv_outerFrameColor" format="color" />
+        <attr name="mcv_minuteHandColor" format="color" />
+        <attr name="mcv_hourHandColor" format="color" />
+        <attr name="mcv_secondHandColor" format="color" />
+        <attr name="mcv_centerCircleColor" format="color" />
+        <attr name="mcv_circleBehindNumberColor" format="color" />
+        <attr name="mcv_textColor" format="color" />
+    </declare-styleable>
+</resources>
