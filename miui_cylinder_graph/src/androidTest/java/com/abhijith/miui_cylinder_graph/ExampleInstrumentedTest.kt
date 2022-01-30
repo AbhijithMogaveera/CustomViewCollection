@@ -1,4 +1,4 @@
-package com.abhijith.custom_drawables
+package com.abhijith.miui_cylinder_graph
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

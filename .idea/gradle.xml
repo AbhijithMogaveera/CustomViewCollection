@@ -11,7 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/custom_drawables" />
+            <option value="$PROJECT_DIR$/miui_cylinder_graph" />
             <option value="$PROJECT_DIR$/simple_clock" />
           </set>
         </option>

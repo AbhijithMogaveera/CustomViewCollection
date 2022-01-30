@@ -41,6 +41,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(path: ":simple_clock")
-    implementation project(path: ":custom_drawables")
+    implementation project(path: ':miui_cylinder_graph')
 
 }
