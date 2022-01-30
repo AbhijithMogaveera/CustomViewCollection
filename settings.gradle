@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CustomViewCollection"
 include ':app', ':simple_clock'
+include ':custom_drawables'
