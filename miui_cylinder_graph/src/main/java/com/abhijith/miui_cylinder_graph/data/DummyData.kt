@@ -5,8 +5,12 @@ import com.abhijith.miui_cylinder_graph.model.SectionData
 
 object DummyData {
     val items = listOf(
-        SectionData(50, R.color.lavender),
-        SectionData(25, R.color.saffron),
-        SectionData(25, R.color.sana),
+        SectionData(40, R.color.c_lavender),
+        SectionData(20, R.color.c_saffron),
+        SectionData(15, R.color.c_pale_cornflower_blue),
+        SectionData(10, R.color.c_sana),
+        SectionData(10, R.color.c_vernilion),
+        SectionData(5, R.color.c_united_nations_blue),
+//        SectionData(10, R.color.c_emerald),
     )
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="anti_flash_white">#F7F8F9</color>
-    <color name="lavender">#D7DDF5</color>
-    <color name="pale_cornflower_blue">#c3cef0</color>
-    <color name="saffron">#fed740</color>
-    <color name="sana">#fe9b43</color>
-    <color name="vernilion">#fd544f</color>
-    <color name="bright_violet">#d64df2</color>
-    <color name="amethyst">#9066f1</color>
-    <color name="united_nations_blue">#47a3fb</color>
-    <color name="emerald">#4be49c</color>
+    <color name="c_anti_flash_white">#F7F8F9</color>
+    <color name="c_lavender">#D7DDF5</color>
+    <color name="c_pale_cornflower_blue">#c3cef0</color>
+    <color name="c_saffron">#fed740</color>
+    <color name="c_sana">#fe9b43</color>
+    <color name="c_vernilion">#fd544f</color>
+    <color name="c_bright_violet">#d64df2</color>
+    <color name="c_amethyst">#9066f1</color>
+    <color name="c_united_nations_blue">#47a3fb</color>
+    <color name="c_emerald">#4be49c</color>
 
 </resources>
