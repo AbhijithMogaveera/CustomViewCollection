@@ -12,7 +12,6 @@
         <activity
             android:name=".MenuActivity"
             android:exported="true"
-            android:label="@string/title_activity_menu"
             android:theme="@style/Theme.CustomViewCollection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
