@@ -1,2 +1,4 @@
 <resources>
+
+    <string name="title_activity_cylinder_graph">CylinderGraphActivity</string>
 </resources>

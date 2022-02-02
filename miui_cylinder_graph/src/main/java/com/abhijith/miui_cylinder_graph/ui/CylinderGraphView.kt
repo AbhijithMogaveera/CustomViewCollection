@@ -22,7 +22,9 @@ class CylinderGraphView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
 ) : View(context, attrs, defStyleAttr, defStyleRes), ViewHelper {
+
     private val shrinkY = 110
+
     private val cylinderDrawable = CylinderDrawable()
 
     private val curvyRectangleDrawable = CurvyRectangleDrawable()
@@ -54,7 +56,7 @@ class CylinderGraphView @JvmOverloads constructor(
             sectionListWithWrapper.map {
                 it.data
             }
-        ) { index, rect, sectionData ->
+        ) { index, rect, _ ->
             rect.bottom = rect.bottom + shrinkY
             sectionListWithWrapper[index].rect.set(rect)
         }
