@@ -4,6 +4,7 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.core.graphics.toColorInt
+import androidx.core.graphics.toRectF
 import com.abhijith.miui_cylinder_graph.util.ARC_VALUE
 
 class CylinderDrawable : Drawable() {
@@ -53,10 +54,8 @@ class CylinderDrawable : Drawable() {
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawPath(myPath, rectanglePaint.apply {
-            color = this@CylinderDrawable.color
-        })
-        canvas.drawOval(ovalBound, ovalPaint)
+
+        canvas.drawOval(bounds.toRectF(), ovalPaint)
     }
 
     override fun setAlpha(alpha: Int) {

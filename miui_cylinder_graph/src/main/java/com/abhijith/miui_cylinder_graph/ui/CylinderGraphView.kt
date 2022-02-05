@@ -2,10 +2,10 @@ package com.abhijith.miui_cylinder_graph.ui
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.abhijith.miui_cylinder_graph.data.DummyData
@@ -23,9 +23,9 @@ class CylinderGraphView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : View(context, attrs, defStyleAttr, defStyleRes), ViewHelper {
 
-    private val shrinkY = 110
+    private val shrinkY = 60
 
-    private val cylinderDrawable = CylinderDrawable()
+    private val ovalDrawable = CylinderDrawable()
 
     private val curvyRectangleDrawable = CurvyRectangleDrawable()
 
@@ -46,9 +46,11 @@ class CylinderGraphView @JvmOverloads constructor(
         val start = paddingStart
         val top = paddingTop
         canvasBound.set(start, top, w, h)
-        canvasBound.bottom = canvasBound.bottom - shrinkY
+        canvasBound.top = canvasBound.top + 130
+        canvasBound.bottom = canvasBound.bottom - 130
         calculateIndividualSectionData()
     }
+
 
     private fun calculateIndividualSectionData() {
         canvasBound.getSpaceDistributed(
@@ -57,30 +59,50 @@ class CylinderGraphView @JvmOverloads constructor(
                 it.data
             }
         ) { index, rect, _ ->
+            val i = 90
+            if (index == 0) {
+                rect.top = rect.top - (i/3)
+                oval = Rect(0, rect.top - i, width, rect.top + i)
+            }
+            /*if(index == 0){
+                rect.bottom = rect.bottom - shrinkY * index
+            }
+            if (index != 0) {
+                rect.top = rect.top - shrinkY * index
+                rect.bottom = rect.bottom - shrinkY * index
+            }*/
+            rect.top = if (index == 0) ((rect.top) - shrinkY) else rect.top - shrinkY
             rect.bottom = rect.bottom + shrinkY
             sectionListWithWrapper[index].rect.set(rect)
+
+
         }
     }
 
+    private var oval = Rect()
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas ?: return
+        canvas.drawRect(canvasBound, paint)
         sectionListWithWrapper.forEachIndexed { index, sectionDataWrapper ->
+            curvyRectangleDrawable.bounds = sectionDataWrapper.rect
+            curvyRectangleDrawable.reset()
+            curvyRectangleDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
+            curvyRectangleDrawable.draw(canvas)
             if (index == 0) {
-                cylinderDrawable.bounds = sectionDataWrapper.rect
-                cylinderDrawable.reset()
-                cylinderDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
-                cylinderDrawable.draw(canvas)
-            } else {
-                curvyRectangleDrawable.bounds = sectionDataWrapper.rect
-                curvyRectangleDrawable.reset()
-                curvyRectangleDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
-                curvyRectangleDrawable.draw(canvas)
+                ovalDrawable.bounds = oval
+                ovalDrawable.reset()
+                ovalDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
+                ovalDrawable.draw(canvas)
             }
         }
     }
 
     override val tempBound: Rect = Rect()
-    override val paint: Paint = Paint()
+    override val paint: Paint = Paint().apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 10f
+        color = Color.RED
+    }
     override val canvasBound: Rect = Rect()
 }

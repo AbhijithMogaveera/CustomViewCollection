@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.abhijith.customviewcollection.navigation.SimpleRoutes
 import com.abhijith.customviewcollection.screens.ClockView
-import com.abhijith.customviewcollection.screens.CylinderGraphView
+import com.abhijith.customviewcollection.screens.CylinderGraphComp
 import com.abhijith.customviewcollection.screens.MainMenu
 import com.abhijith.customviewcollection.ui.theme.CustomViewCollectionTheme
 
@@ -36,7 +36,7 @@ class MenuActivity : ComponentActivity() {
                             ClockView()
                         }
                         composable(SimpleRoutes.CYLINDER_SCREEN) {
-                            CylinderGraphView()
+                            CylinderGraphComp()
                         }
                     }
                 }

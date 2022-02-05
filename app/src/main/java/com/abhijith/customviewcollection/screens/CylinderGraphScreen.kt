@@ -5,10 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.abhijith.miui_cylinder_graph.ui.CylinderGraphView
 
 @Composable
-fun CylinderGraphView() {
+fun CylinderGraphComp() {
     AndroidView(factory = {
-        com.abhijith.miui_cylinder_graph.ui.CylinderGraphView(it)
+        CylinderGraphView(it)
     }, modifier = Modifier.padding(horizontal = 100.dp, vertical = 200.dp))
 }
