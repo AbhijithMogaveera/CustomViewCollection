@@ -13,6 +13,7 @@ import com.abhijith.customviewcollection.navigation.SimpleRoutes
 import com.abhijith.customviewcollection.screens.ClockView
 import com.abhijith.customviewcollection.screens.CylinderGraphComp
 import com.abhijith.customviewcollection.screens.MainMenu
+import com.abhijith.customviewcollection.screens.TestScreen
 import com.abhijith.customviewcollection.ui.theme.CustomViewCollectionTheme
 
 @ExperimentalMaterialApi
@@ -33,7 +34,7 @@ class MenuActivity : ComponentActivity() {
                             }
                         }
                         composable(SimpleRoutes.CLOCK_SCREEN) {
-                            ClockView()
+                            TestScreen()
                         }
                         composable(SimpleRoutes.CYLINDER_SCREEN) {
                             CylinderGraphComp()

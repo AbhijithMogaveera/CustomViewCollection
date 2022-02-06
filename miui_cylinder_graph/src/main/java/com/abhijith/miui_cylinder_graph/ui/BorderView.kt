@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.abhijith.miui_cylinder_graph.data.DummyData
 import com.abhijith.miui_cylinder_graph.util.ViewHelper
-import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributed
+import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributedStartByTop
 
 class BorderView @JvmOverloads constructor(
     context: Context,
@@ -26,7 +26,7 @@ class BorderView @JvmOverloads constructor(
         canvas.getClipBounds(canvasBound)
         val i = 110
         canvasBound.bottom = canvasBound.bottom - i
-        canvasBound.getSpaceDistributed(this, DummyData.items) { index, rect, data ->
+        canvasBound.getSpaceDistributedStartByTop(this, DummyData.items) { index, rect, data ->
 //            rect.bottom = rect.bottom + i
             canvas.drawRect(
                 rect,

@@ -1,20 +1,28 @@
 package com.abhijith.miui_cylinder_graph.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.abhijith.miui_cylinder_graph.data.DummyData
-import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributed
+import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributedStartByBottom
+import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributedStartByBottomWithGap
 import com.abhijith.miui_cylinder_graph.model.SectionData
 import com.abhijith.miui_cylinder_graph.model.SectionDataWrapper
-import com.abhijith.miui_cylinder_graph.shape.CurvyRectangleDrawable
 import com.abhijith.miui_cylinder_graph.shape.CylinderDrawable
 import com.abhijith.miui_cylinder_graph.util.ViewHelper
+
+interface CylinderCallBack {
+    fun onSelectionStarted()
+    fun onSelection(x: Float, y: Float, sectionData: SectionData)
+    fun onSelectionCleared()
+}
 
 class CylinderGraphView @JvmOverloads constructor(
     context: Context,
@@ -23,22 +31,78 @@ class CylinderGraphView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : View(context, attrs, defStyleAttr, defStyleRes), ViewHelper {
 
-    private val shrinkY = 60
-
-    private val ovalDrawable = CylinderDrawable()
-
-    private val curvyRectangleDrawable = CurvyRectangleDrawable()
-
+    var cylinderCallBack: CylinderCallBack? = null
+    private val cylinder = CylinderDrawable()
+    var selectedWrapper: SectionDataWrapper? = null
     private var sectionListWithWrapper: List<SectionDataWrapper> = listOf()
+    var space = 0
+    private var leftSpace = 0
+    private var isInSelectionMode = false
 
-    init {
-        setData(DummyData.items)
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                cylinderCallBack?.onSelectionStarted()
+                isInSelectionMode = true
+                detectSelectedRect(event)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                detectSelectedRect(event)
+            }
+            MotionEvent.ACTION_UP -> {
+                isInSelectionMode = false
+                selectedWrapper = null
+                cylinderCallBack?.onSelectionCleared()
+                invalidate()
+            }
+        }
+        return true
     }
 
-    private fun setData(list: List<SectionData>) {
+    private fun detectSelectedRect(event: MotionEvent) {
+        sectionListWithWrapper.onEach {
+
+            if (
+                canvasBound.contains(canvasBound.centerX(), event.y.toInt())&&
+                it.rect.contains(it.rect.centerX(), (event.y).toInt())
+                && selectedWrapper != it
+            ) {
+                cylinderCallBack?.onSelection(
+                    it.rect.centerX().toFloat(),
+                    it.rect.centerY()-160f,
+                    it.data
+                )
+                selectedWrapper = it
+                invalidate()
+            }
+        }
+    }
+
+    init {
+
+//        setData(DummyData.items)
+    }
+
+    private fun distributeRectEvenly() {
+        if (leftSpace >= 0) {
+            canvasBound.getSpaceDistributedStartByBottomWithGap(
+                this,
+                sectionListWithWrapper.map {
+                    it.data
+                },
+                space
+            ) { index, rect, _ ->
+                distributeSpace(rect, index)
+            }
+        }
+        invalidate()
+    }
+
+    fun setData(list: List<SectionData>) {
         sectionListWithWrapper = list.map {
             SectionDataWrapper(it)
         }
+        distributeRectEvenly()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -49,60 +113,69 @@ class CylinderGraphView @JvmOverloads constructor(
         canvasBound.top = canvasBound.top + 130
         canvasBound.bottom = canvasBound.bottom - 130
         calculateIndividualSectionData()
+
     }
 
 
     private fun calculateIndividualSectionData() {
-        canvasBound.getSpaceDistributed(
+        canvasBound.getSpaceDistributedStartByBottom(
             this,
             sectionListWithWrapper.map {
                 it.data
             }
         ) { index, rect, _ ->
-            val i = 90
-            if (index == 0) {
-                rect.top = rect.top - (i/3)
-                oval = Rect(0, rect.top - i, width, rect.top + i)
-            }
-            /*if(index == 0){
-                rect.bottom = rect.bottom - shrinkY * index
-            }
-            if (index != 0) {
-                rect.top = rect.top - shrinkY * index
-                rect.bottom = rect.bottom - shrinkY * index
-            }*/
-            rect.top = if (index == 0) ((rect.top) - shrinkY) else rect.top - shrinkY
-            rect.bottom = rect.bottom + shrinkY
-            sectionListWithWrapper[index].rect.set(rect)
-
-
+            distributeSpace(rect, index)
         }
     }
 
-    private var oval = Rect()
+    private fun distributeSpace(rect: Rect, index: Int) {
+        sectionListWithWrapper[index].rect.set(rect)
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas ?: return
-        canvas.drawRect(canvasBound, paint)
-        sectionListWithWrapper.forEachIndexed { index, sectionDataWrapper ->
-            curvyRectangleDrawable.bounds = sectionDataWrapper.rect
-            curvyRectangleDrawable.reset()
-            curvyRectangleDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
-            curvyRectangleDrawable.draw(canvas)
-            if (index == 0) {
-                ovalDrawable.bounds = oval
-                ovalDrawable.reset()
-                ovalDrawable.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
-                ovalDrawable.draw(canvas)
+        if (!isInSelectionMode) {
+            sectionListWithWrapper.forEachIndexed { _, sectionDataWrapper ->
+                cylinder.invalidate(newBound = sectionDataWrapper.rect)
+                cylinder.isEnabled = true
+                cylinder.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
+                cylinder.draw(canvas)
+            }
+        } else {
+            sectionListWithWrapper.forEachIndexed { _, sectionDataWrapper ->
+                if (selectedWrapper === sectionDataWrapper) {
+                    cylinder.isEnabled = true
+                    cylinder.invalidate(newBound = sectionDataWrapper.rect)
+                    cylinder.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
+                    cylinder.draw(canvas)
+                } else {
+                    cylinder.isEnabled = false
+                    cylinder.invalidate(newBound = sectionDataWrapper.rect)
+                    cylinder.color = ContextCompat.getColor(context, sectionDataWrapper.data.color)
+                    cylinder.draw(canvas)
+                }
             }
         }
+    }
+
+    private val valueAnimator = ValueAnimator()
+    fun animateStack() {
+        valueAnimator.apply {
+            setFloatValues(1000f, 0f)
+            duration = 1500
+            addUpdateListener {
+                space = (it.animatedValue as Float).toInt()
+                distributeRectEvenly()
+            }
+        }.start()
     }
 
     override val tempBound: Rect = Rect()
     override val paint: Paint = Paint().apply {
         style = Paint.Style.STROKE
         strokeWidth = 10f
-        color = Color.RED
+        color = Color.BLACK
     }
     override val canvasBound: Rect = Rect()
 }

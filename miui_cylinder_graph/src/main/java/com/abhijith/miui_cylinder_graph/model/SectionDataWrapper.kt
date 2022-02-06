@@ -4,5 +4,5 @@ import android.graphics.Rect
 
 data class SectionDataWrapper(
     val data:SectionData,
-    val rect: Rect = Rect()
+    val rect: Rect = Rect(),
 )
