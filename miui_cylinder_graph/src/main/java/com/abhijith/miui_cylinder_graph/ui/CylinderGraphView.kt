@@ -1,6 +1,7 @@
 package com.abhijith.miui_cylinder_graph.ui
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.abhijith.miui_cylinder_graph.data.DummyData
 import com.abhijith.miui_cylinder_graph.extension.getSpaceDistributedStartByBottom
@@ -33,15 +35,15 @@ class CylinderGraphView @JvmOverloads constructor(
 
     var cylinderCallBack: CylinderCallBack? = null
     private val cylinder = CylinderDrawable()
-    var selectedWrapper: SectionDataWrapper? = null
+    private var selectedWrapper: SectionDataWrapper? = null
     private var sectionListWithWrapper: List<SectionDataWrapper> = listOf()
-    var space = 0
-    private var leftSpace = 0
+    private var space = 0
     private var isInSelectionMode = false
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
+            MotionEvent.ACTION_DOWN-> {
                 cylinderCallBack?.onSelectionStarted()
                 isInSelectionMode = true
                 detectSelectedRect(event)
@@ -63,13 +65,13 @@ class CylinderGraphView @JvmOverloads constructor(
         sectionListWithWrapper.onEach {
 
             if (
-                canvasBound.contains(canvasBound.centerX(), event.y.toInt())&&
+                canvasBound.contains(canvasBound.centerX(), event.y.toInt()) &&
                 it.rect.contains(it.rect.centerX(), (event.y).toInt())
                 && selectedWrapper != it
             ) {
                 cylinderCallBack?.onSelection(
                     it.rect.centerX().toFloat(),
-                    it.rect.centerY()-160f,
+                    it.rect.centerY() - 160f,
                     it.data
                 )
                 selectedWrapper = it
@@ -84,16 +86,14 @@ class CylinderGraphView @JvmOverloads constructor(
     }
 
     private fun distributeRectEvenly() {
-        if (leftSpace >= 0) {
-            canvasBound.getSpaceDistributedStartByBottomWithGap(
-                this,
-                sectionListWithWrapper.map {
-                    it.data
-                },
-                space
-            ) { index, rect, _ ->
-                distributeSpace(rect, index)
-            }
+        canvasBound.getSpaceDistributedStartByBottomWithGap(
+            this,
+            sectionListWithWrapper.map {
+                it.data
+            },
+            space
+        ) { index, rect, _ ->
+            distributeSpace(rect, index)
         }
         invalidate()
     }
@@ -115,7 +115,6 @@ class CylinderGraphView @JvmOverloads constructor(
         calculateIndividualSectionData()
 
     }
-
 
     private fun calculateIndividualSectionData() {
         canvasBound.getSpaceDistributedStartByBottom(

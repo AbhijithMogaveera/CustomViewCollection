@@ -34,7 +34,7 @@ class MenuActivity : ComponentActivity() {
                             }
                         }
                         composable(SimpleRoutes.CLOCK_SCREEN) {
-                            TestScreen()
+                            ClockView()
                         }
                         composable(SimpleRoutes.CYLINDER_SCREEN) {
                             CylinderGraphComp()

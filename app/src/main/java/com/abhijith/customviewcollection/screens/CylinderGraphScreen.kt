@@ -119,14 +119,14 @@ fun CylinderGraphComp() {
             else
                 Spacer(
                     Modifier
-                        .padding(vertical = 130.dp)
+                        .padding(vertical = 50.dp)
                         .width(100.dp)
                         .fillMaxHeight(),
                 )
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(vertical = 130.dp)
+                    .padding(top = 130.dp)
                     .fillMaxHeight()
                     .verticalScroll(state = ss)
             ) {
