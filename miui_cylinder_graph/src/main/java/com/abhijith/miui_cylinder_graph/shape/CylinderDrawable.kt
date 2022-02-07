@@ -4,7 +4,6 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
-import com.abhijith.miui_cylinder_graph.util.ARC_VALUE
 
 /*@ColorInt fun darkenColor(@ColorInt color: Int): Int {
     return Color.HSVToColor(FloatArray(3).apply {
