@@ -13,7 +13,6 @@ import com.abhijith.customviewcollection.navigation.SimpleRoutes
 import com.abhijith.customviewcollection.screens.ClockView
 import com.abhijith.customviewcollection.screens.CylinderGraphComp
 import com.abhijith.customviewcollection.screens.MainMenu
-import com.abhijith.customviewcollection.screens.TestScreen
 import com.abhijith.customviewcollection.ui.theme.CustomViewCollectionTheme
 
 @ExperimentalMaterialApi
@@ -28,21 +27,29 @@ class MenuActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     NavHost(navController = navController, startDestination = SimpleRoutes.MENU_SCREEN) {
+
                         composable(SimpleRoutes.MENU_SCREEN) {
-                            MainMenu{
+                            MainMenu {
                                 navController.navigate(it)
                             }
                         }
+
                         composable(SimpleRoutes.CLOCK_SCREEN) {
                             ClockView()
                         }
+
                         composable(SimpleRoutes.CYLINDER_SCREEN) {
                             CylinderGraphComp()
                         }
+
                     }
+
                 }
+
             }
+
         }
+
     }
 }
 
