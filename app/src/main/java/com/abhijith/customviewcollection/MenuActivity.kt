@@ -40,10 +40,6 @@ class MenuActivity : ComponentActivity() {
                         composable(SimpleRoutes.CYLINDER_SCREEN) {
                             CylinderGraphComp()
                         }
-
-                        composable(SimpleRoutes.WHATS_APP_MESSAGE_SCREEN){
-
-                        }
                     }
 
                 }

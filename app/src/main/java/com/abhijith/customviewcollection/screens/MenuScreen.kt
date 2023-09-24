@@ -23,9 +23,6 @@ fun MainMenu(
         MenuItem("CylinderGraph 📊") {
             onRouteSelection(SimpleRoutes.CYLINDER_SCREEN)
         }
-        MenuItem(name = "Whatsapp message composer 💬") {
-            onRouteSelection(SimpleRoutes.WHATS_APP_MESSAGE_SCREEN)
-        }
     }
 }
 
