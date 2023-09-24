@@ -114,9 +114,8 @@ class MyClockView @JvmOverloads constructor(
     private val bound: Rect = Rect()
     private val numBound: Rect = Rect()
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas ?: return
         if (this::metaData.isInitialized) {
             canvas.apply {
                 val time = ClockHelper.time

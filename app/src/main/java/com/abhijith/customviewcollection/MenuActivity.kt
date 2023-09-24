@@ -27,7 +27,6 @@ class MenuActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     NavHost(navController = navController, startDestination = SimpleRoutes.MENU_SCREEN) {
-
                         composable(SimpleRoutes.MENU_SCREEN) {
                             MainMenu {
                                 navController.navigate(it)
@@ -42,6 +41,9 @@ class MenuActivity : ComponentActivity() {
                             CylinderGraphComp()
                         }
 
+                        composable(SimpleRoutes.WHATS_APP_MESSAGE_SCREEN){
+
+                        }
                     }
 
                 }

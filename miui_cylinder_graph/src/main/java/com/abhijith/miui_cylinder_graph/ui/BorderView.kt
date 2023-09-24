@@ -20,9 +20,8 @@ class BorderView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr, defStyleRes), ViewHelper {
 
     @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas ?: return
         canvas.getClipBounds(canvasBound)
         val i = 110
         canvasBound.bottom = canvasBound.bottom - i

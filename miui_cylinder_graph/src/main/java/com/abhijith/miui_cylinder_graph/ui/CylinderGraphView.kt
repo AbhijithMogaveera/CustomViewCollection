@@ -131,9 +131,8 @@ class CylinderGraphView @JvmOverloads constructor(
         sectionListWithWrapper[index].rect.set(rect)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas ?: return
         if (!isInSelectionMode) {
             sectionListWithWrapper.forEachIndexed { _, sectionDataWrapper ->
                 cylinder.invalidate(newBound = sectionDataWrapper.rect)
