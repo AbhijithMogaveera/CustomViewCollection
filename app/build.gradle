@@ -62,7 +62,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation project(path: ":simple_clock")
-    implementation project(path: ':miui_cylinder_graph')
+    implementation project(path: ':features:clock')
+    implementation project(path: ':features:cylindergraph')
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
 }

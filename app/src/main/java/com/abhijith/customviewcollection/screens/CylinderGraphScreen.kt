@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -21,27 +20,29 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.abhijith.customviewcollection.R
-import com.abhijith.miui_cylinder_graph.data.DummyData
-import com.abhijith.miui_cylinder_graph.model.SectionData
-import com.abhijith.miui_cylinder_graph.ui.CylinderCallBack
-import com.abhijith.miui_cylinder_graph.ui.CylinderGraphView
+import com.abhijith.cylindergraph.DemoData
+import com.abhijith.cylindergraph.CylinderSectionData
+import com.abhijith.cylindergraph.CylinderHover
+import com.abhijith.cylindergraph.CylinderGraphView
 
 data class SectionDataWrapper(
     val title: String,
     val subTitle: String,
-    val sectionData: SectionData,
+    val cylinderSectionData: CylinderSectionData,
     var point: LayoutCoordinates? = null
 )
 
 @Composable
 fun CylinderGraphComp() {
     val ss: ScrollState = rememberScrollState()
-    val list = DummyData.items.mapIndexed { index, sectionData ->
-        SectionDataWrapper(
-            "item ${index + 1}",
-            "${sectionData.percentage}% Space occupied",
-            sectionData = sectionData
-        )
+    val list = remember {
+        DemoData.items.mapIndexed { index, sectionData ->
+            SectionDataWrapper(
+                "item ${index + 1}",
+                "${sectionData.percentage}% Space occupied",
+                cylinderSectionData = sectionData
+            )
+        }
     }
     var drawFromY by remember {
         mutableStateOf(0f)
@@ -52,7 +53,7 @@ fun CylinderGraphComp() {
     var drawColor by remember {
         mutableStateOf(R.color.black)
     }
-    var isAnySpecificSelected by remember {
+    var isAnySectionSelected by remember {
         mutableStateOf(false)
     }
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -68,30 +69,30 @@ fun CylinderGraphComp() {
                 factory = { context ->
                     CylinderGraphView(context).apply {
                         setData(list.map {
-                            it.sectionData
+                            it.cylinderSectionData
                         })
-                        cylinderCallBack = object : CylinderCallBack {
+                        cylinderHover = object : CylinderHover {
 
-                            override fun onSelectionStarted() {
-                                isAnySpecificSelected = true
+                            override fun onEnter() {
+                                isAnySectionSelected = true
                             }
 
-                            override fun onSelection(
+                            override fun onMove(
                                 x: Float,
                                 y: Float,
-                                sectionData: SectionData
+                                cylinderSectionData: CylinderSectionData
                             ) {
                                 drawFromY = y
                                 val firstOrNull = list.firstOrNull {
-                                    it.sectionData === sectionData
+                                    it.cylinderSectionData === cylinderSectionData
                                 }
                                 toY = (firstOrNull?.point?.positionInParent()?.y
                                     ?: 0).toFloat() - ss.value
-                                drawColor = sectionData.color
+                                drawColor = cylinderSectionData.color
                             }
 
-                            override fun onSelectionCleared() {
-                                isAnySpecificSelected = false
+                            override fun onExit() {
+                                isAnySectionSelected = false
                             }
 
                         }
@@ -106,7 +107,7 @@ fun CylinderGraphComp() {
                 }
 
             )
-            if (isAnySpecificSelected)
+            if (isAnySectionSelected)
                 PathDrawer(
                     Modifier
                         .padding(vertical = 130.dp)
@@ -133,7 +134,7 @@ fun CylinderGraphComp() {
                 list.asReversed().forEach {
                     Card(
                         shape = RoundedCornerShape(10.dp),
-                        backgroundColor = colorResource(id = it.sectionData.color),
+                        backgroundColor = colorResource(id = it.cylinderSectionData.color),
                         modifier = Modifier
                             .padding(10.dp)
                             .fillMaxWidth()
@@ -168,7 +169,9 @@ fun CylinderGraphComp() {
             onClick = {
                 view?.animateStack()
             },
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
             shape = RoundedCornerShape(10.dp),
         ) {
             Text(

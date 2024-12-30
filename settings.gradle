@@ -3,11 +3,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "CustomViewCollection"
-include ':app', ':simple_clock'
-include ':miui_cylinder_graph'
-include ':core-ui-helper'
-include ':search_view'
+include ':app'
+include ':features:clock'
+include ':features:cylindergraph'
